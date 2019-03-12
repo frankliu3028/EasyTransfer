@@ -6,6 +6,7 @@ import utils.LogLevel;
 import utils.Util;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class SDServer extends Thread{
@@ -29,6 +30,9 @@ public class SDServer extends Thread{
         }
         try{
             socket = new MulticastSocket(Config.SERVICE_DISCOVER_LISTEN_PORT);
+            InetAddress multicastInetAddress = InetAddress.getByName(Config.multicastAddress);
+            socket.joinGroup(multicastInetAddress);
+
         }catch (IOException e){
             e.printStackTrace();
         }

@@ -8,7 +8,7 @@ public class UtilTest {
 
     @Test
     public void isLoclePortUsing() {
-        boolean res = Util.isLoclePortUsing(8080);
+        boolean res = Util.isLocalPortUsing(8080);
         assertFalse(res);
     }
 }
