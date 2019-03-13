@@ -1,6 +1,6 @@
 package sd;
 
-import protocol.ErrorCode;
+import protocol.*;
 import utils.Config;
 import utils.Log;
 import utils.LogLevel;
@@ -16,6 +16,7 @@ public class SDServer extends Thread{
     private String TAG = SDServer.class.getSimpleName();
     private MulticastSocket socket;
     private SDServerCallback callback;
+    public static boolean isRunning = true;
 
     public SDServer(SDServerCallback callback){
         if(callback == null){
@@ -37,7 +38,7 @@ public class SDServer extends Thread{
             socket.joinGroup(multicastInetAddress);
             byte[] buffer = new byte[1024];
             DatagramPacket recPacket = new DatagramPacket(buffer, buffer.length);
-            while(true){
+            while(isRunning){
                 socket.receive(recPacket);
                 handlePacketReceived(recPacket);
             }
@@ -48,6 +49,28 @@ public class SDServer extends Thread{
     }
 
     private void handlePacketReceived(DatagramPacket recPacket){
+        BasicProtocol basicProtocol = UtilProtocol.readFromBytes(recPacket.getData());
+        if(basicProtocol == null){
+            Log.log(TAG, LogLevel.INFO, "parse failure, discard packet");
+            return;
+        }
+        if(basicProtocol.getMsgId() != MsgId.SERVICE_DISCOVER_REQUEST){
+            Log.log(TAG, LogLevel.WARNING, "unknown msgid");
+            return;
+        }
+
+        BasicProtocol retProtocol = new BasicProtocol();
+        retProtocol.setErrorCode(ErrorCode.SUCCESS);
+        retProtocol.setMsgId(MsgId.SERVICE_DISCOVER_RESPONSE);
+        retProtocol.setDataFormat(DataFormat.CUSTOM);
+        retProtocol.setDataArray(Util.int2ByteArrays(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT));
+        byte[] retBuffer = retProtocol.getBytes();
+        DatagramPacket retPacket = new DatagramPacket(retBuffer, retBuffer.length, recPacket.getSocketAddress());
+        try{
+            socket.send(retPacket);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
     }
 }
