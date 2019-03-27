@@ -131,7 +131,7 @@ public class BasicProtocol {
 		if(offset >= data.length) {
 			return -1;
 		}
-		dataArray = Arrays.copyOfRange(data, offset, length);
+		dataArray = Arrays.copyOfRange(data, offset, data.length);
 		return dataArray.length;
 	}
 

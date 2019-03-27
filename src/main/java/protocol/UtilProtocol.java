@@ -47,4 +47,12 @@ public class UtilProtocol {
 		}
 		return null;
 	}
+
+	public static BasicProtocol readFromBytesWithoutLength(byte[] data){
+		BasicProtocol p = new BasicProtocol();
+		if(p.parseWithoutLength(data)){
+			return p;
+		}
+		return null;
+	}
 }

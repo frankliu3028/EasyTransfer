@@ -146,7 +146,7 @@ public class Util {
     
     public static int bytes2Int(byte[] b, int byteOffset) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(Integer.SIZE / Byte.SIZE);
-        byteBuffer.put(b, byteOffset, 4); //ռ4���ֽ�
+        byteBuffer.put(b, byteOffset, 4);
         byteBuffer.flip();
         return byteBuffer.getInt();
 	}
