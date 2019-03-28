@@ -157,4 +157,13 @@ public class Util {
 		return sd;
 	}
 
+	public static int getAValidPort(){
+		for(int i = 10001; i < 65533; i++){
+			if(!isLocalPortUsing(i)){
+				return i;
+			}
+		}
+		return -1;
+	}
+
 }
