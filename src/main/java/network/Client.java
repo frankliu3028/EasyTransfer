@@ -1,5 +1,6 @@
 package network;
 
+import entity.DeviceInfo;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -7,18 +8,21 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import protocol.BasicProtocol;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 
 public class Client {
 
-    private final int port;
-    private final InetAddress inetAddress;
+    private DeviceInfo deviceInfo;
+    private File file;
     private Channel channel;
+    private ClientCallback callback;
 
-    public Client(InetAddress inetAddress, int port){
-        this.inetAddress = inetAddress;
-        this.port = port;
+    public Client(DeviceInfo deviceInfo, File file, ClientCallback callback){
+        this.deviceInfo = deviceInfo;
+        this.file = file;
+        this.callback = callback;
     }
 
     public void start(){
@@ -31,7 +35,7 @@ public class Client {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ProtocolEncoder(), new ClientHandler());
+                            ch.pipeline().addLast(new ProtocolEncoder(), new ClientHandler(deviceInfo, file, callback));
                             ch.pipeline().addLast(new ProtocolDecoder());
                         }
                     });
@@ -43,10 +47,6 @@ public class Client {
         }finally {
             worker.shutdownGracefully();
         }
-    }
-
-    public void sendMessage(BasicProtocol protocol){
-        channel.writeAndFlush(protocol);
     }
 
     public void close(){

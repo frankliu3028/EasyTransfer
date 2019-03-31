@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 import java.util.Vector;
 
@@ -23,6 +24,7 @@ public class MainWindow {
     private JScrollPane scrollPane_1;
     private JTable table;
     private PromptDialog dialogPrompt;
+    private NetWorkCallback netWorkCallback;
 
     private ActionListener btnScanClickListener = new ActionListener() {
 
@@ -56,7 +58,19 @@ public class MainWindow {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
+            printConsole("click button send file");
+            DeviceInfo di = (DeviceInfo)listDeviceFound.getSelectedValue();
+            if(di == null) {
+                printConsole("请选择要发送的设备");
+                return;
+            }
+            File fileSend = Util.selectFile("请选择要发送的文件");
+            if(fileSend == null) {
+                printConsole("未选择任何文件");
+                return;
+            }
 
+            netWorkCallback.sendFileRequest(di, fileSend);
 
         }
 
@@ -65,7 +79,8 @@ public class MainWindow {
     /**
      * Create the application.
      */
-    public MainWindow() {
+    public MainWindow(NetWorkCallback netWorkCallback) {
+        this.netWorkCallback = netWorkCallback;
         initialize();
     }
 
