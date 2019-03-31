@@ -27,6 +27,7 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new ProtocolDecoder(), new MainChildHandler());
+                            ch.pipeline().addLast(new ProtocolEncoder());
                         }
                     })
                     .childOption(ChannelOption.SO_KEEPALIVE, true);

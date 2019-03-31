@@ -53,13 +53,13 @@ public class Util {
 	}
 
 	public static boolean isLocalPortUsing(int port){
-		boolean flag = false;
+		boolean flag = true;
 		Socket socket = new Socket();
 		try{
 			InetAddress inetAddress = InetAddress.getByName("localhost");
 			InetSocketAddress inetSocketAddress = new InetSocketAddress(inetAddress, port);
 			socket.bind(inetSocketAddress);
-			flag = true;
+			flag = false;
 		}catch (IOException e){
 			e.printStackTrace();
 		}finally {
