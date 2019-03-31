@@ -1,6 +1,6 @@
 package network;
 
-import entity.TaskListItem;
+import utils.Config;
 import utils.Log;
 import utils.LogLevel;
 import utils.Util;
@@ -28,20 +28,33 @@ public class FileReceiver implements Runnable{
 
     @Override
     public void run() {
+        Socket worker = null;
         try{
             int listenPort = Util.getAValidPort();
             socket = new ServerSocket(listenPort);
             callback.ready(listenPort);
-            Socket worker = socket.accept();
-
+            worker = socket.accept();
+            receiveFileBySocket(new File(Config.fileSaveDir), worker.getInputStream());
         }catch (IOException e){
             e.printStackTrace();
+        }finally {
+            try{
+                if(socket != null){
+                    socket.close();
+                }
+                if(worker != null){
+                    worker.close();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
 
 
     }
 
-    public void receiveFileBySocket(File fileSavePath, InputStream inputStream)
+    private void receiveFileBySocket(File fileSavePath, InputStream inputStream)
     {
         if(!fileSavePath.isDirectory())
         {
