@@ -1,5 +1,8 @@
 package network;
 
+import entity.TaskListItem;
+
 public interface ServerCallback {
-    void receiveFile();
+    void receiveFile(TaskListItem item);
+    void updateProgress(TaskListItem item);
 }

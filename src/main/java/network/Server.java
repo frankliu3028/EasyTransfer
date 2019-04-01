@@ -12,8 +12,11 @@ import io.netty.handler.logging.LoggingHandler;
 public class Server {
     private final int port;
 
-    public Server(int port){
+    private ServerCallback callback;
+
+    public Server(int port, ServerCallback callback){
         this.port = port;
+        this.callback = callback;
     }
 
     public void start(){

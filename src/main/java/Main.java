@@ -3,6 +3,7 @@ import entity.TaskListItem;
 import network.Client;
 import network.ClientCallback;
 import network.Server;
+import network.ServerCallback;
 import sd.SDServer;
 import sd.SDServerCallback;
 import ui.MainWindow;
@@ -12,8 +13,6 @@ import utils.Log;
 import utils.LogLevel;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
 
@@ -48,6 +47,18 @@ public class Main {
         }
     };
 
+    private static ServerCallback serverCallback = new ServerCallback() {
+        @Override
+        public void receiveFile(TaskListItem item) {
+            mainWindow.addTask(item);
+        }
+
+        @Override
+        public void updateProgress(TaskListItem item) {
+            mainWindow.updateProgress(item);
+        }
+    };
+
 
     public static void main(String[] args){
         Log.log(TAG, LogLevel.INFO,"main start");
@@ -62,7 +73,7 @@ public class Main {
             }
         });
         sdServer.start();
-        server = new Server(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT);
+        server = new Server(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT, serverCallback);
         mainWindow = new MainWindow(netWorkCallback);
         mainWindow.setVisible(true);
     }

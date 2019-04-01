@@ -17,6 +17,7 @@ public class FileReceiver implements Runnable{
     private long fileSize;
     private FileReceiverCallback callback;
     private ServerSocket socket;
+    private File fileWillBeSaved;
 
     private final int BLOCK_SIZE = 1024;
 
@@ -79,7 +80,7 @@ public class FileReceiver implements Runnable{
             }
             String fileName = new String(fileNameByte, 0, fileNameByte.length);
             Log.log(TAG, LogLevel.INFO, "fileName is :" + fileName);
-            File fileWillBeSaved = new File(fileSavePath.getPath()+"/"+fileName);
+            fileWillBeSaved = new File(fileSavePath.getPath()+"/"+fileName);
             Log.log(TAG, LogLevel.INFO, "file saved to:"+fileWillBeSaved.getAbsolutePath());
             byte[] fileLenByte = new byte[8];
             readTemp = inputStream.read(fileLenByte);
@@ -115,5 +116,12 @@ public class FileReceiver implements Runnable{
         bos.flush();
         bos.close();
         Log.log(TAG, LogLevel.INFO, "total read:"+totalSizeHaveRead);
+    }
+
+    public String getFileAbPath(){
+        if(fileWillBeSaved != null){
+            return fileWillBeSaved.getAbsolutePath();
+        }
+        return null;
     }
 }
