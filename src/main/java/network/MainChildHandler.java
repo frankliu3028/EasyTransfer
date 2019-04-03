@@ -62,6 +62,11 @@ public class MainChildHandler extends ChannelInboundHandlerAdapter {
                                 MainChildHandler.this.item.setProgress(progress);
                                 callback.updateProgress(MainChildHandler.this.item);
                             }
+
+                            @Override
+                            public void finish() {
+                                callback.receiveFinish(item);
+                            }
                         });
                 executor.execute(fileReceiver);
 

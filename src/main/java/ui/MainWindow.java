@@ -4,17 +4,24 @@ import entity.DeviceInfo;
 import entity.TaskListItem;
 import sd.SDClient;
 import sd.SDClientCallback;
+import utils.Log;
+import utils.LogLevel;
 import utils.Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
 public class MainWindow {
+
+    private final String TAG = MainWindow.class.getSimpleName();
 
     private JFrame frame;
     private JList listDeviceFound;
@@ -25,6 +32,8 @@ public class MainWindow {
     private JTable table;
     private PromptDialog dialogPrompt;
     private NetWorkCallback netWorkCallback;
+
+    private WindowClosedListener windowClosedListener;
 
     private ActionListener btnScanClickListener = new ActionListener() {
 
@@ -39,6 +48,7 @@ public class MainWindow {
                     // TODO Auto-generated method stub
                     DeviceInfo[] deviceInfos = new DeviceInfo[deviceInfoList.size()];
                     deviceInfoList.toArray(deviceInfos);
+                    Log.log(TAG, LogLevel.BRIEF, "扫描到设备：" + Arrays.toString(deviceInfos));
                     listDeviceFound.setListData(deviceInfos);
                     dialogPrompt.setVisible(false);
 
@@ -149,6 +159,44 @@ public class MainWindow {
         tblTask.setBounds(14, 343, 72, 18);
         frame.getContentPane().add(tblTask);
 
+        frame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if(windowClosedListener != null){
+                    windowClosedListener.windowClosed();
+                }
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
     }
 
     public void printConsole(String text) {
@@ -184,5 +232,9 @@ public class MainWindow {
     public void removeTask(TaskListItem item) {
         DefaultTableModel model = (DefaultTableModel)table.getModel();
         model.removeRow(item.getId());
+    }
+
+    public void setWindowClosedListener(WindowClosedListener windowClosedListener){
+        this.windowClosedListener = windowClosedListener;
     }
 }

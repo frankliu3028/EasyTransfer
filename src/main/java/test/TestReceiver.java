@@ -23,6 +23,11 @@ public class TestReceiver {
             public void currentProgress(int progress) {
                 Log.log(TAG, LogLevel.INFO, "currentProgress:" + progress);
             }
+
+            @Override
+            public void finish() {
+
+            }
         })).start();
     }
 }

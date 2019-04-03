@@ -36,6 +36,7 @@ public class FileReceiver implements Runnable{
             callback.ready(listenPort);
             worker = socket.accept();
             receiveFileBySocket(new File(Config.fileSaveDir), worker.getInputStream());
+            callback.finish();
         }catch (IOException e){
             e.printStackTrace();
         }finally {

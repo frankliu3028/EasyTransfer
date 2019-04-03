@@ -8,6 +8,7 @@ import sd.SDServer;
 import sd.SDServerCallback;
 import ui.MainWindow;
 import ui.NetWorkCallback;
+import ui.WindowClosedListener;
 import utils.Config;
 import utils.Log;
 import utils.LogLevel;
@@ -38,7 +39,13 @@ public class Main {
                     public void currentProgress(TaskListItem item) {
                         mainWindow.updateProgress(item);
                     }
+
+                    @Override
+                    public void sendFinish(TaskListItem item) {
+                        mainWindow.removeTask(item);
+                    }
                 });
+                client.start();
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -57,6 +64,11 @@ public class Main {
         public void updateProgress(TaskListItem item) {
             mainWindow.updateProgress(item);
         }
+
+        @Override
+        public void receiveFinish(TaskListItem item) {
+            mainWindow.removeTask(item);
+        }
     };
 
 
@@ -74,8 +86,16 @@ public class Main {
         });
         sdServer.start();
         server = new Server(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT, serverCallback);
+        server.start();
         mainWindow = new MainWindow(netWorkCallback);
         mainWindow.setVisible(true);
+
+        mainWindow.setWindowClosedListener(new WindowClosedListener() {
+            @Override
+            public void windowClosed() {
+                server.close();
+            }
+        });
     }
 
 }

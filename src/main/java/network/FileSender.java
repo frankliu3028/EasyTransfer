@@ -31,6 +31,7 @@ public class FileSender implements Runnable{
         try{
             socket = new Socket(targetAddr, targetPort);
             sendFileBySocket(file, socket.getOutputStream());
+            callback.finish();
         }catch (IOException e){
             e.printStackTrace();
         }finally {

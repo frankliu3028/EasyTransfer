@@ -6,11 +6,8 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import protocol.BasicProtocol;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetAddress;
 
 public class Client {
 
@@ -41,7 +38,6 @@ public class Client {
                     });
             ChannelFuture f = b.connect().sync();
             channel = f.channel();
-            f.channel().closeFuture().sync();
         }catch (InterruptedException e){
             e.printStackTrace();
         }finally {

@@ -22,6 +22,7 @@ public class Util {
 	public static int byteArrayToInt(byte[] b) {
 		if(b.length != 4) {
 			Log.log(TAG, LogLevel.ERROR, "byte array turn to INT length must be 4");
+			return -1;
 		}
         int intValue = 0;
         for (int i = 0; i < b.length; i++) {

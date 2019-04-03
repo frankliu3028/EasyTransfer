@@ -65,6 +65,11 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
                             item.setProgress(progress);
                             callback.currentProgress(item);
                         }
+
+                        @Override
+                        public void finish() {
+                            callback.sendFinish(ClientHandler.this.item);
+                        }
                     });
                     new Thread(fileSender).start();
                 }
