@@ -3,6 +3,7 @@ package sd;
 import entity.DeviceInfo;
 import protocol.BasicProtocol;
 import protocol.ProtocolFactory;
+import protocol.UtilProtocol;
 import utils.Config;
 import utils.Log;
 import utils.LogLevel;
@@ -10,10 +11,7 @@ import utils.Util;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class SDClient extends Thread{
     private final String TAG = SDClient.class.getSimpleName();
@@ -53,8 +51,12 @@ public class SDClient extends Thread{
                     continue;
                 }
 
-                int port= Util.byteArrayToInt(recPacket.getData());
-                resList.add(new DeviceInfo(recPacket.getAddress().getHostAddress(), port));
+                BasicProtocol recProtocol = UtilProtocol.readFromBytes(recPacket.getData());
+                byte[] recData = recProtocol.getDataArray();
+                int port= Util.bytes2Int(recData, 0);
+                byte[] hostnameBytes = Arrays.copyOfRange(recData, 4, recData.length);
+                String hostname = new String(hostnameBytes, 0, hostnameBytes.length);
+                resList.add(new DeviceInfo(recPacket.getAddress().getHostAddress(), port, hostname));
             }
 
             if(callback != null) {

@@ -106,6 +106,18 @@ public class Util {
             }
         }
 	}
+
+	public static String getLocalHostname(){
+		String ip = getLocalIpAddress();
+		try {
+			InetAddress inetAddress = InetAddress.getByName(ip);
+			String hostname = inetAddress.getHostName();
+			return hostname;
+		}catch (UnknownHostException e){
+			e.printStackTrace();
+		}
+		return null;
+	}
     
     public static File selectDirectory(String dialogTitle) {
     	JFileChooser chooser = new JFileChooser();

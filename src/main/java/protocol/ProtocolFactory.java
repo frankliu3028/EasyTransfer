@@ -1,8 +1,10 @@
 package protocol;
 
+import utils.Config;
 import utils.Util;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 public class ProtocolFactory {
 
@@ -28,5 +30,21 @@ public class ProtocolFactory {
         basicProtocol.setMsgId(MsgId.FILE_SEND_REQUEST);
         basicProtocol.setDataArray(fileSendRequest.getMsgBytes());
         return basicProtocol;
+    }
+
+    public static BasicProtocol createServiceDiscoverResponse(byte errorCode){
+        BasicProtocol basicProtocol = new BasicProtocol();
+        if(ErrorCode.SUCCESS == errorCode){
+            basicProtocol.setErrorCode(ErrorCode.SUCCESS);
+            basicProtocol.setMsgId(MsgId.SERVICE_DISCOVER_RESPONSE);
+            basicProtocol.setDataFormat(DataFormat.CUSTOM);
+            String hostname = Util.getLocalHostname();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(4 + hostname.getBytes().length);
+            byteBuffer.put(Util.int2ByteArrays(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT));
+            byteBuffer.put(hostname.getBytes());
+            basicProtocol.setDataArray(byteBuffer.array());
+            return basicProtocol;
+        }
+        return null;
     }
 }

@@ -9,6 +9,7 @@ import utils.Util;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 
 public class SDServer extends Thread{
@@ -33,7 +34,9 @@ public class SDServer extends Thread{
             return;
         }
         try{
-            socket = new MulticastSocket(Config.SERVICE_DISCOVER_LISTEN_PORT);
+            InetAddress inetAddress = InetAddress.getByName(Util.getLocalIpAddress());
+            InetSocketAddress inetSocketAddress = new InetSocketAddress(inetAddress, Config.SERVICE_DISCOVER_LISTEN_PORT);
+            socket = new MulticastSocket(inetSocketAddress);
             InetAddress multicastInetAddress = InetAddress.getByName(Config.multicastAddress);
             socket.joinGroup(multicastInetAddress);
             byte[] buffer = new byte[1024];
@@ -59,11 +62,8 @@ public class SDServer extends Thread{
             return;
         }
 
-        BasicProtocol retProtocol = new BasicProtocol();
-        retProtocol.setErrorCode(ErrorCode.SUCCESS);
-        retProtocol.setMsgId(MsgId.SERVICE_DISCOVER_RESPONSE);
-        retProtocol.setDataFormat(DataFormat.CUSTOM);
-        retProtocol.setDataArray(Util.int2ByteArrays(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT));
+        BasicProtocol retProtocol = ProtocolFactory.createServiceDiscoverResponse(ErrorCode.SUCCESS);
+
         byte[] retBuffer = retProtocol.getBytes();
         DatagramPacket retPacket = new DatagramPacket(retBuffer, retBuffer.length, recPacket.getSocketAddress());
         try{

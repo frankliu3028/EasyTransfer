@@ -18,4 +18,10 @@ public class UtilTest {
     public void getAValidPort() {
         Log.log(TAG, LogLevel.INFO, "valid port:" + Util.getAValidPort());
     }
+
+
+    @Test
+    public void getLocalHostname() {
+        Log.log(TAG, LogLevel.BRIEF, "hostname"+ Util.getLocalHostname());
+    }
 }
