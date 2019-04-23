@@ -86,7 +86,13 @@ public class Main {
         });
         sdServer.start();
         server = new Server(Config.FILE_TRANSFER_SERVICE_LISTEN_PORT, serverCallback);
-        server.start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                server.start();
+            }
+        }).start();
+
         mainWindow = new MainWindow(netWorkCallback);
         mainWindow.setVisible(true);
 

@@ -13,25 +13,27 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MainChildHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
 
-    private final String TAG = MainChildHandler.class.getSimpleName();
+    private final String TAG = ServerHandler.class.getSimpleName();
 
     private ServerCallback callback;
     private Executor executor = Executors.newCachedThreadPool();
 
     private TaskListItem item;
 
-    public MainChildHandler(ServerCallback callback){
+    public ServerHandler(ServerCallback callback){
         this.callback = callback;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         BasicProtocol basicProtocol = (BasicProtocol)msg;
+        Log.log(TAG, LogLevel.INFO, "receive msg:" + basicProtocol.toString());
         switch (basicProtocol.getMsgId()){
             case MsgId.FILE_SEND_REQUEST:
                 FileSendRequest fileSendRequest = Parser.parseFileSendRequest(basicProtocol.getDataArray());
+                Log.log(TAG, LogLevel.INFO, "receive FILE_SEND_REQUEST "+ fileSendRequest.toString());
                 FileReceiver fileReceiver = new FileReceiver(fileSendRequest.getFileName(), fileSendRequest.getFileLength(),
                         new FileReceiverCallback() {
                             @Override
@@ -54,13 +56,13 @@ public class MainChildHandler extends ChannelInboundHandlerAdapter {
                                 item.setPath(Config.fileSaveDir + "/" + fileSendRequest.getFileName());
                                 item.setProgress(0);
                                 callback.receiveFile(item);
-                                MainChildHandler.this.item = item;
+                                ServerHandler.this.item = item;
                             }
 
                             @Override
                             public void currentProgress(int progress) {
-                                MainChildHandler.this.item.setProgress(progress);
-                                callback.updateProgress(MainChildHandler.this.item);
+                                ServerHandler.this.item.setProgress(progress);
+                                callback.updateProgress(ServerHandler.this.item);
                             }
 
                             @Override

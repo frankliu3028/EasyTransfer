@@ -138,7 +138,7 @@ public class BasicProtocol {
 	@Override
 	public String toString() {
 		return "BasicProtocol [length=" + length + ", errorCode=" + errorCode + ", msgId=" + msgId + ", dataFormat="
-				+ dataFormat + "]";
+				+ dataFormat + ", dataLength = " + (dataArray == null? 0 : dataArray.length) + "]";
 	}
 	
 	

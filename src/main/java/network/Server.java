@@ -34,13 +34,14 @@ public class Server {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ProtocolDecoder(), new MainChildHandler(callback));
+                            ch.pipeline().addLast(new ProtocolDecoder(), new ServerHandler(callback));
                             ch.pipeline().addLast(new ProtocolEncoder());
                         }
                     })
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
             ChannelFuture f = b.bind(port).sync();
             channel = f.channel();
+            f.channel().closeFuture().sync();
         }catch (InterruptedException e){
             e.printStackTrace();
         }finally {
