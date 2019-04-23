@@ -47,6 +47,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                                 }
                                 BasicProtocol fileSendResponse = ProtocolFactory.createFileSendResponse(ErrorCode.SUCCESS, port);
                                 ctx.writeAndFlush(fileSendResponse);
+                                Log.log(TAG, LogLevel.INFO, "send message FILE_SEND_RESPONSE:" + fileSendResponse.toString());
 
                                 TaskListItem item = new TaskListItem();
                                 item.setId(taskId);
