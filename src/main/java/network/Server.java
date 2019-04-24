@@ -34,8 +34,8 @@ public class Server {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ProtocolDecoder(), new ServerHandler(callback));
-                            ch.pipeline().addLast(new ProtocolEncoder());
+                            ch.pipeline().addLast(new ProtocolEncoder(),new ProtocolDecoder(), new ServerHandler(callback));
+                            //ch.pipeline().addLast(new ProtocolEncoder());
                         }
                     })
                     .childOption(ChannelOption.SO_KEEPALIVE, true);

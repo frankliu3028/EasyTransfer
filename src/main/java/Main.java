@@ -43,6 +43,7 @@ public class Main {
                     @Override
                     public void sendFinish(TaskListItem item) {
                         mainWindow.removeTask(item);
+                        mainWindow.printConsole("send file: " + item.getPath());
                     }
                 });
                 client.start();
@@ -67,6 +68,7 @@ public class Main {
 
         @Override
         public void receiveFinish(TaskListItem item) {
+            mainWindow.printConsole("receive file:" + item.getPath());
             mainWindow.removeTask(item);
         }
     };

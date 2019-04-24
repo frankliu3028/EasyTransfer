@@ -32,8 +32,8 @@ public class Client {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new ProtocolEncoder(), new ClientHandler(deviceInfo, file, callback));
-                            ch.pipeline().addLast(new ProtocolDecoder());
+                            ch.pipeline().addLast(new ProtocolEncoder(),new ProtocolDecoder(), new ClientHandler(deviceInfo, file, callback));
+                            //ch.pipeline().addLast(new ProtocolDecoder());
                         }
                     });
             ChannelFuture f = b.connect(deviceInfo.getIp(), deviceInfo.getPort()).sync();

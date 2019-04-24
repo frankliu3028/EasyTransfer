@@ -25,7 +25,7 @@ public class ProtocolDecoder extends ByteToMessageDecoder {
                 in.resetReaderIndex();
                 return;
             }
-            //Log.log(TAG, LogLevel.INFO, "length2: " + length);
+            Log.log(TAG, LogLevel.INFO, "length2: " + length);
             byte[] msgBytes = new byte[length - 4];
             in.readBytes(msgBytes);
             BasicProtocol basicProtocol = UtilProtocol.readFromBytesWithoutLength(msgBytes);

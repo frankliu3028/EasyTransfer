@@ -72,6 +72,7 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
                         }
                     });
                     new Thread(fileSender).start();
+                    ctx.close();
                 }
                 break;
                 default:

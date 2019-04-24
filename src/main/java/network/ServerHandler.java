@@ -68,6 +68,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
                             @Override
                             public void finish() {
+                                TaskIdPool.getInstance().release(item.getId());
                                 callback.receiveFinish(item);
                             }
                         });
