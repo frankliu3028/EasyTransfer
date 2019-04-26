@@ -40,7 +40,7 @@ public class MainWindow {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            printConsole("click button scan");
+            //printConsole("click button scan");
             SDClient sdClient = new SDClient(new SDClientCallback() {
 
                 @Override
@@ -68,7 +68,7 @@ public class MainWindow {
         @Override
         public void actionPerformed(ActionEvent e) {
             // TODO Auto-generated method stub
-            printConsole("click button send file");
+            //printConsole("click button send file");
             DeviceInfo di = (DeviceInfo)listDeviceFound.getSelectedValue();
             if(di == null) {
                 printConsole("请选择要发送的设备");

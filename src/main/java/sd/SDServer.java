@@ -39,6 +39,7 @@ public class SDServer extends Thread{
             socket = new MulticastSocket(inetSocketAddress);
             InetAddress multicastInetAddress = InetAddress.getByName(Config.multicastAddress);
             socket.joinGroup(multicastInetAddress);
+            socket.setLoopbackMode(true);
             byte[] buffer = new byte[1024];
             DatagramPacket recPacket = new DatagramPacket(buffer, buffer.length);
             while(isRunning){
