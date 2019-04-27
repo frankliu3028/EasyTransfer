@@ -32,6 +32,7 @@ public class SDClient extends Thread{
             socket = new MulticastSocket();
             InetAddress groupAddr = InetAddress.getByName(Config.multicastAddress);
             socket.joinGroup(groupAddr);
+            socket.setLoopbackMode(true);
             BasicProtocol basicProtocol = ProtocolFactory.createServiceDiscoverRequest();
             DatagramPacket packetReq = new DatagramPacket(basicProtocol.getBytes(), basicProtocol.getBytes().length, groupAddr, Config.SERVICE_DISCOVER_LISTEN_PORT);
             socket.send(packetReq);
